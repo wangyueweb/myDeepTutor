@@ -1,5 +1,10 @@
 <div align="center">
 
+> ### 👤 个人部署说明（中文）
+> 这是我（wangyueweb）的 DeepTutor 个人部署版。包含我的配置、知识库、使用教程和修改记录，**请先看这里** → [📖 MY_USAGE_CN.md](./MY_USAGE_CN.md)
+
+---
+
 <p align="center"><img src="assets/figs/logo/logo.png" alt="DeepTutor logo" height="56" style="vertical-align: middle;">&nbsp;<img src="assets/figs/logo/banner.png" alt="DeepTutor" height="48" style="vertical-align: middle;"></p>
 
 # DeepTutor: Lifelong Personalized Tutoring
