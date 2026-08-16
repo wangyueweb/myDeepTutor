@@ -78,6 +78,9 @@ node_modules/
 **/node_modules
 **/node_modules/
 
+# Local npm cache (used when the system npm cache is unavailable)
+.npm-cache/
+
 # Next.js build output
 .next/
 web/.next/

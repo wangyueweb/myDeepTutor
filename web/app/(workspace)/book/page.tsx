@@ -215,13 +215,25 @@ function BookPageInner() {
   // Allow deep-linking via /book?book=<id> (e.g. from the global sidebar).
   const searchParams = useSearchParams();
   const requestedBookId = searchParams?.get("book") || null;
+  const requestedPageId = searchParams?.get("page") || null;
   useEffect(() => {
     if (!requestedBookId) return;
-    if (requestedBookId === selectedBookId) return;
-    if (requestedBookId === lastDeepLinkedBookId.current) return;
+    if (requestedBookId === selectedBookId && !requestedPageId) return;
+    if (
+      requestedBookId === lastDeepLinkedBookId.current &&
+      !requestedPageId &&
+      requestedBookId === selectedBookId
+    )
+      return;
     lastDeepLinkedBookId.current = requestedBookId;
-    void handleSelectBook(requestedBookId);
-  }, [requestedBookId, selectedBookId, handleSelectBook]);
+    void (async () => {
+      await handleSelectBook(requestedBookId);
+      // Deep-linked page (e.g. a ConceptGraph chapter link): jump straight to it.
+      if (requestedPageId) {
+        setSelectedPageId(requestedPageId);
+      }
+    })();
+  }, [requestedBookId, requestedPageId, selectedBookId, handleSelectBook]);
 
   const handleDeleteBook = async (id: string) => {
     if (!confirm(t("Delete this book? This cannot be undone."))) return;
