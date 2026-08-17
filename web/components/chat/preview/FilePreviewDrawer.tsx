@@ -2,10 +2,11 @@
 
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { Check, Copy, Download, X } from "lucide-react";
+import { Check, Copy, Download, Share2, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { docIconFor, formatBytes } from "@/lib/doc-attachments";
 import { apiUrl } from "@/lib/api";
+import ShareDialog, { type ShareSource } from "@/components/collab/ShareDialog";
 import {
   type FilePreviewSource,
   previewKindFor,
@@ -134,6 +135,7 @@ export default function FilePreviewDrawer({
   const previewKind = renderedSource ? previewKindFor(renderedSource) : null;
 
   const [copied, setCopied] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const handleCopy = useCallback(async () => {
     if (!downloadUrl) return;
     try {
@@ -152,6 +154,18 @@ export default function FilePreviewDrawer({
   const sizeLabel = renderedSource?.size
     ? formatBytes(renderedSource.size)
     : "";
+  const rawUrl = renderedSource?.url ?? "";
+  const shareable =
+    typeof rawUrl === "string" &&
+    rawUrl.length > 0 &&
+    (rawUrl.startsWith("/api/") || /^https?:\/\/.*\/api\//.test(rawUrl));
+  const shareSource: ShareSource | null = shareable
+    ? {
+        url: rawUrl,
+        filename: renderedSource?.filename || filename,
+        mime: renderedSource?.mimeType,
+      }
+    : null;
 
   return (
     <div
@@ -222,6 +236,17 @@ export default function FilePreviewDrawer({
                 )}
               </button>
             )}
+            {shareSource && (
+              <button
+                type="button"
+                onClick={() => setShareOpen(true)}
+                title={t("collab.share_annotate")}
+                aria-label={t("collab.share_annotate")}
+                className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--muted-foreground)] transition-colors hover:bg-[var(--muted)] hover:text-[var(--foreground)]"
+              >
+                <Share2 size={14} strokeWidth={1.7} />
+              </button>
+            )}
             <button
               ref={closeBtnRef}
               type="button"
@@ -248,6 +273,11 @@ export default function FilePreviewDrawer({
           </div>
         </>
       )}
+      <ShareDialog
+        open={shareOpen}
+        source={shareSource}
+        onClose={() => setShareOpen(false)}
+      />
     </div>
   );
 }

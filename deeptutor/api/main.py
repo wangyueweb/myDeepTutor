@@ -317,6 +317,7 @@ from deeptutor.api.routers import (
     capabilities_settings,
     chat,
     co_writer,
+    collab,
     dashboard,
     imports,
     knowledge,
@@ -387,6 +388,12 @@ app.include_router(
 app.include_router(
     co_writer.router, prefix="/api/v1/co_writer", tags=["co_writer"], dependencies=_auth
 )
+app.include_router(
+    collab.router, prefix="/api/v1/collab", tags=["collab"], dependencies=_auth
+)
+# Collab room WebSocket — auth is public-by-default (token is the credential);
+# registered without _auth, mirroring unified_ws/quiz_judge.
+app.include_router(collab.ws_router, prefix="/api/v1/collab", tags=["collab"])
 app.include_router(
     notebook.router, prefix="/api/v1/notebook", tags=["notebook"], dependencies=_auth
 )

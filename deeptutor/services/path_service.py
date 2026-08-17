@@ -53,6 +53,7 @@ WorkspaceFeature = Literal[
     "co-writer",
     "chat",
     "book",
+    "collab",
 ]
 
 
@@ -336,6 +337,26 @@ class PathService:
     def get_co_writer_doc_manifest(self, doc_id: str) -> Path:
         return self.get_co_writer_doc_root(doc_id) / "manifest.json"
 
+    # ── Collaborative annotation (share links) paths ────────────────────
+
+    def get_collab_dir(self) -> Path:
+        return self.get_workspace_feature_dir("collab")
+
+    def get_collab_shares_dir(self) -> Path:
+        return self.get_collab_dir() / "shares"
+
+    def get_collab_share_root(self, share_token: str) -> Path:
+        return self.get_collab_shares_dir() / f"share_{share_token}"
+
+    def get_collab_manifest_file(self, share_token: str) -> Path:
+        return self.get_collab_share_root(share_token) / "manifest.json"
+
+    def get_collab_annotations_file(self, share_token: str) -> Path:
+        return self.get_collab_share_root(share_token) / "annotations.jsonl"
+
+    def get_collab_snapshot_file(self, share_token: str) -> Path:
+        return self.get_collab_share_root(share_token) / "snapshot.json"
+
     # ── Book Engine paths ────────────────────────────────────────────────
 
     def get_book_dir(self) -> Path:
@@ -436,6 +457,7 @@ class PathService:
         self.get_co_writer_tool_calls_dir().mkdir(parents=True, exist_ok=True)
         self.get_co_writer_audio_dir().mkdir(parents=True, exist_ok=True)
         self.get_research_reports_dir().mkdir(parents=True, exist_ok=True)
+        self.get_collab_shares_dir().mkdir(parents=True, exist_ok=True)
 
 
 def get_path_service() -> PathService:

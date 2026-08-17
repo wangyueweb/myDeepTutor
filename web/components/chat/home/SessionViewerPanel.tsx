@@ -37,6 +37,7 @@ import {
   Loader2,
   MessageSquarePlus,
   Paperclip,
+  Share2,
   X,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -54,6 +55,7 @@ import SubagentTabBody from "@/components/chat/home/SubagentTabBody";
 import type { QuizFollowupTabContext } from "@/context/QuizFollowupContext";
 import type { GeogebraTabPayload } from "@/context/GeogebraTabContext";
 import { apiUrl } from "@/lib/api";
+import ShareDialog from "@/components/collab/ShareDialog";
 import type { MessageAttachment } from "@/context/UnifiedChatContext";
 import type { StreamEvent } from "@/lib/unified-ws";
 
@@ -833,6 +835,12 @@ function FileTabBody({ source }: { source: FilePreviewSource }) {
   const previewUrl = useMemo(() => resolveSourceUrl(source, apiUrl), [source]);
   const kind = previewKindFor(source);
   const filename = source.filename || t("Attachment");
+  const [shareOpen, setShareOpen] = useState(false);
+
+  const rawUrl = source.url ?? "";
+  const shareable =
+    rawUrl.length > 0 &&
+    (rawUrl.startsWith("/api/") || /^https?:\/\/.*\/api\//.test(rawUrl));
 
   // Prefer the served URL; fall back to a data URL for pending (un-sent)
   // base64 attachments so download / open-in-browser still work.
@@ -864,6 +872,16 @@ function FileTabBody({ source }: { source: FilePreviewSource }) {
             <Download size={13} strokeWidth={1.8} />
           </a>
         ) : null}
+        {shareable ? (
+          <button
+            type="button"
+            onClick={() => setShareOpen(true)}
+            className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-[var(--muted-foreground)] transition-colors hover:bg-[var(--muted)]/45 hover:text-[var(--foreground)]"
+          >
+            <Share2 size={13} strokeWidth={1.8} />
+            {t("collab.share_annotate")}
+          </button>
+        ) : null}
         <button
           type="button"
           onClick={openInBrowser}
@@ -877,6 +895,19 @@ function FileTabBody({ source }: { source: FilePreviewSource }) {
       <div className="relative flex-1 overflow-hidden">
         <PreviewBody source={source} previewUrl={previewUrl} kind={kind} />
       </div>
+      <ShareDialog
+        open={shareOpen}
+        source={
+          shareable
+            ? {
+                url: rawUrl,
+                filename: source.filename || filename,
+                mime: source.mimeType,
+              }
+            : null
+        }
+        onClose={() => setShareOpen(false)}
+      />
     </div>
   );
 }

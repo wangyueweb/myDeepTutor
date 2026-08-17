@@ -95,6 +95,8 @@ PROVIDER_ALIASES = {
     "codebuddy_code": "codebuddy",
     "workbuddy": "codebuddy",
     "lm-studio": "lm_studio",
+    "sense_nova": "sensenova",
+    "sensechat": "sensenova",
     "atlas": "atlascloud",
     "atlas_cloud": "atlascloud",
     "atlas-cloud": "atlascloud",
@@ -413,6 +415,14 @@ PROVIDERS: tuple[ProviderSpec, ...] = (
         display_name="Xiaomi MIMO",
         backend="openai_compat",
         default_api_base="https://api.xiaomimimo.com/v1",
+    ),
+    ProviderSpec(
+        name="sensenova",
+        keywords=("sensenova", "sensechat"),
+        env_key="SENSENOVA_API_KEY",
+        display_name="SenseNova",
+        backend="openai_compat",
+        default_api_base="https://token.sensenova.cn/v1",
     ),
     # === Local deployment ==================================================
     ProviderSpec(
