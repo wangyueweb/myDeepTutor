@@ -62,6 +62,7 @@ function newOpId(): string {
 
 export function CollabProvider({ children }: { children: ReactNode }) {
   const socketRef = useRef<CollabSocket | null>(null);
+  const handleMessageRef = useRef<((msg: ServerMessage) => void) | null>(null);
   const [connected, setConnected] = useState(false);
   const [role, setRole] = useState<Role>("viewer");
   const [memberId, setMemberId] = useState("");
@@ -151,19 +152,23 @@ export function CollabProvider({ children }: { children: ReactNode }) {
     },
     [applyOp, memberId],
   );
+  handleMessageRef.current = handleMessage;
 
   const join = useCallback(
     (token: string, ownerToken: string | null, displayName?: string) => {
       setError(null);
       if (!socketRef.current) {
+        // Use a ref-wrapped handler so the socket always calls the LATEST
+        // handleMessage (which has the up-to-date memberId etc.), even though
+        // the CollabSocket is created once and never re-created.
         socketRef.current = new CollabSocket({
-          onMessage: handleMessage,
+          onMessage: (msg) => handleMessageRef.current!(msg),
           onStatus: setConnected,
         });
       }
       socketRef.current.connect({ token, ownerToken, displayName });
     },
-    [handleMessage],
+    [],
   );
 
   const sendOp = useCallback((op: PendingOp) => {

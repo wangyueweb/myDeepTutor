@@ -154,6 +154,9 @@ export default function AnnotatablePdfViewer({
       if (entry.ink) {
         entry.ink.style.touchAction = ta;
         entry.ink.style.pointerEvents = pe;
+        // Force a synchronous reflow so the browser commits the style change
+        // before the next touch event can be dispatched.
+        void entry.ink.offsetHeight;
       }
     });
   }, [canAnnotate]);
