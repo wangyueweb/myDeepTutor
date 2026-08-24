@@ -238,14 +238,17 @@ def _apply_op(
     return live
 
 
-_storages: dict[str, CollabStorage] = {}
-
-
 def get_collab_storage() -> CollabStorage:
-    key = str(get_path_service().workspace_root.resolve())
-    if key not in _storages:
-        _storages[key] = CollabStorage()
-    return _storages[key]
+    """One global store for all collab shares.
+
+    Shares are cross-user by design (a token in a link is the credential), so
+    they live in a single store anchored to the admin workspace — not the
+    current viewer's scope. Existing data already sits in
+    ``data/user/workspace/collab/shares``, so no migration is needed.
+    """
+    from deeptutor.multi_user.paths import get_admin_path_service
+
+    return CollabStorage(path_service=get_admin_path_service())
 
 
 __all__ = ["CollabStorage", "get_collab_storage"]

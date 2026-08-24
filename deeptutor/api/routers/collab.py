@@ -36,8 +36,9 @@ from deeptutor.collab.export import export_annotated_pdf
 from deeptutor.collab.models import AnnotationOp, SourceInfo
 from deeptutor.collab.rooms import get_room_registry
 from deeptutor.collab.storage import get_collab_storage
-from deeptutor.multi_user.context import get_current_user_or_none
-from deeptutor.services.path_service import get_path_service
+from deeptutor.multi_user.context import get_current_user_or_none, reset_current_user
+from deeptutor.multi_user.models import LOCAL_ADMIN_ID
+from deeptutor.services.config import load_system_settings
 from deeptutor.services.storage import LocalDiskAttachmentStore, get_attachment_store
 
 router = APIRouter()
@@ -60,7 +61,13 @@ def _validate_token(token: str) -> str:
 
 
 def _owner_is(auth: str | None, doc) -> bool:
-    return bool(auth) and secrets.compare_digest(auth, doc.owner_token)
+    """Owner powers go to whoever holds the owner_token OR the logged-in owner
+    (so an owner who opens the link on a new device — without the localStorage
+    owner_token — still keeps owner access)."""
+    if auth and secrets.compare_digest(auth, doc.owner_token):
+        return True
+    user = get_current_user_or_none()
+    return bool(user and doc.owner_user_id and user.id == doc.owner_user_id)
 
 
 def _content_disposition(filename: str, *, disposition: str = "inline") -> str:
@@ -72,21 +79,56 @@ def _content_disposition(filename: str, *, disposition: str = "inline") -> str:
 
 # ── Source resolution (security-critical) ────────────────────────────────
 
+def _owner_path_service(owner_user_id: str):
+    """The path service of the account that created the share.
+
+    Shares reference files that live in the *owner's* workspace, so they must be
+    resolved through the owner's scope — never the current viewer's. Admin
+    accounts (the ``local-admin`` sentinel *or* a real admin account's uid) own
+    the admin workspace; everyone else owns ``data/users/<uid>/``.
+    """
+    from deeptutor.multi_user.identity import load_users
+    from deeptutor.multi_user.paths import (
+        get_admin_path_service,
+        get_path_service_for_scope,
+        scope_for_user,
+    )
+
+    if not owner_user_id or owner_user_id == LOCAL_ADMIN_ID:
+        return get_admin_path_service()
+    # A real admin account also owns the admin workspace (its uid is stored in
+    # the manifest, not the ``local-admin`` sentinel).
+    for record in load_users().values():
+        if record.get("id") == owner_user_id and record.get("role") == "admin":
+            return get_admin_path_service()
+    return get_path_service_for_scope(scope_for_user(owner_user_id, is_admin=False))
+
+
 def resolve_source_path(doc) -> Path | None:
     """Map a share's ``source.url`` back to a real file, reusing the same
-    guards the public endpoints apply (no path traversal)."""
+    guards the public endpoints apply (no path traversal).
+
+    The file is resolved through the *owner's* path service so a viewer in a
+    different workspace can still reach it.
+    """
+    ps = _owner_path_service(doc.owner_user_id)
     url = doc.source.url or ""
     kind = doc.source.kind
     if kind == "outputs" or url.startswith("/api/outputs/"):
         rel = url.split("/api/outputs/", 1)[1] if "/api/outputs/" in url else url
-        return get_path_service().resolve_public_output_path(unquote(rel))
+        return ps.resolve_public_output_path(unquote(rel))
     if kind == "attachment" or url.startswith("/api/attachments/"):
         rest = url.split("/api/attachments/", 1)[1]
         parts = rest.split("/", 2)
         if len(parts) < 3:
             return None
         session_id, attachment_id, filename = unquote(parts[0]), unquote(parts[1]), unquote(parts[2])
-        store = get_attachment_store()
+        # A global chat_attachment_dir override is shared by every user;
+        # otherwise attachments live under the owner's chat workspace.
+        if load_system_settings().get("chat_attachment_dir"):
+            store = get_attachment_store()
+        else:
+            store = LocalDiskAttachmentStore(root=ps.get_chat_workspace_root() / "attachments")
         if isinstance(store, LocalDiskAttachmentStore):
             return store.resolve_path(
                 session_id=session_id, attachment_id=attachment_id, filename=filename
@@ -176,13 +218,18 @@ async def create_share(request: ShareCreateRequest) -> dict[str, Any]:
     if not url:
         raise HTTPException(status_code=400, detail="source.url is required")
 
-    # De-duplicate: one document → one stable share link. Reuse an existing
-    # share for the same source so repeated "share" clicks don't mint new links.
-    # `force_new` opts out (e.g. "new link" in the management page) so the same
-    # document can be shared with different groups as independent copies.
+    user = get_current_user_or_none()
+    owner_user_id = getattr(user, "id", "") if user else ""
+    owner_display_name = getattr(user, "username", "") if user else ""
+
+    # De-duplicate: one document → one stable share link, scoped to the owner.
+    # Reuse an existing share for the same source so repeated "share" clicks
+    # don't mint new links — but never hand a share (and its owner_token) to a
+    # different user. `force_new` opts out (e.g. "new link" in the management
+    # page) so the same document can be shared with different groups.
     if not request.force_new:
         existing = storage.find_by_source_url(url)
-        if existing is not None:
+        if existing is not None and existing.owner_user_id == owner_user_id:
             return {
                 "share_token": existing.share_token,
                 "owner_token": existing.owner_token,
@@ -192,10 +239,6 @@ async def create_share(request: ShareCreateRequest) -> dict[str, Any]:
 
     share_token = _new_token()
     owner_token = _new_token()
-
-    user = get_current_user_or_none()
-    owner_user_id = getattr(user, "id", "") if user else ""
-    owner_display_name = getattr(user, "username", "") if user else ""
 
     filename = str(source_raw.get("filename") or "document")
     mime = str(source_raw.get("mime") or "") or (mimetypes.guess_type(filename)[0] or "application/octet-stream")
@@ -222,11 +265,21 @@ async def create_share(request: ShareCreateRequest) -> dict[str, Any]:
     }
 
 
+def _owned_by_me(doc) -> bool:
+    """True when the share belongs to the current (authenticated) user."""
+    user = get_current_user_or_none()
+    my_id = user.id if user else ""
+    # No user context (shouldn't happen under require_auth) → don't filter.
+    return (not my_id) or (doc.owner_user_id == my_id)
+
+
 @router.get("/shares")
 async def list_shares() -> dict[str, Any]:
     storage = get_collab_storage()
     shares: list[dict[str, Any]] = []
     for doc in _iter_documents(storage):
+        if not _owned_by_me(doc):
+            continue
         shares.append(doc.public_dict())
     shares.sort(key=lambda s: s["updated_at"], reverse=True)
     return {"shares": shares}
@@ -235,11 +288,13 @@ async def list_shares() -> dict[str, Any]:
 @router.get("/shares/manage")
 async def list_shares_manage() -> dict[str, Any]:
     """Owner management list — includes ``owner_token`` so the local owner can
-    delete shares from the "My shares" page. Single-user local only; in a
-    multi-user deployment this must be scoped to the authenticated owner."""
+    delete shares from the "My shares" page. Scoped to the authenticated owner,
+    so one user never sees (or manages) another's shares."""
     storage = get_collab_storage()
     shares: list[dict[str, Any]] = []
     for doc in _iter_documents(storage):
+        if not _owned_by_me(doc):
+            continue
         item = doc.public_dict()
         item["owner_token"] = doc.owner_token
         item["source_url"] = doc.source.url
@@ -382,6 +437,11 @@ def _iter_documents(storage):
 
 @ws_router.websocket("/ws")
 async def collab_ws(ws: WebSocket) -> None:
+    from deeptutor.api.routers.auth import ws_auth_failed, ws_require_auth
+
+    user_token = await ws_require_auth(ws)
+    if user_token is ws_auth_failed:
+        return
     await ws.accept()
     registry = get_room_registry()
     storage = get_collab_storage()
@@ -425,10 +485,20 @@ async def collab_ws(ws: WebSocket) -> None:
                     await close_error("not_found", "Share not found")
                     break
                 room = registry.get_or_create(doc)
-                is_owner = bool(msg.get("owner_token")) and secrets.compare_digest(
-                    str(msg.get("owner_token")), doc.owner_token
+                user = get_current_user_or_none()
+                # Owner = the logged-in account that created the share, or the
+                # bearer of the owner_token (kept for the localStorage flow).
+                is_owner = (
+                    (user is not None and doc.owner_user_id and user.id == doc.owner_user_id)
+                    or (bool(msg.get("owner_token")) and secrets.compare_digest(
+                        str(msg.get("owner_token")), doc.owner_token))
                 )
                 display_name = str(msg.get("display_name") or "匿名")
+                if user is not None and user.id != LOCAL_ADMIN_ID:
+                    # Bind the author name to the authenticated identity so a
+                    # viewer can't forge another teacher's name. The local admin
+                    # (single-user) keeps the client-supplied name.
+                    display_name = user.username
                 welcome = await room.join(member_id, ws, display_name, is_owner)
                 await send(welcome)
                 joined_token = token
@@ -462,6 +532,7 @@ async def collab_ws(ws: WebSocket) -> None:
     except WebSocketDisconnect:
         pass
     finally:
+        reset_current_user(user_token)
         if joined_token is not None:
             room = registry.get(joined_token)
             if room is not None:
