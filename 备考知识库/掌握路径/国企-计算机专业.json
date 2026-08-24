@@ -1,0 +1,83 @@
+{
+  "mastery_path_id": "guoqi-jisuanji",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "通信原理",
+      "knowledge_points": [
+        {
+          "name": "信号与系统基础",
+          "type": "concept"
+        },
+        {
+          "name": "模拟与数字调制",
+          "type": "memory"
+        },
+        {
+          "name": "信道与编码",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "计算机网络",
+      "knowledge_points": [
+        {
+          "name": "OSI与TCP/IP模型",
+          "type": "concept"
+        },
+        {
+          "name": "路由与交换",
+          "type": "procedure"
+        },
+        {
+          "name": "网络安全",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "数据库",
+      "knowledge_points": [
+        {
+          "name": "关系数据库基础",
+          "type": "concept"
+        },
+        {
+          "name": "SQL语言",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "操作系统",
+      "knowledge_points": [
+        {
+          "name": "进程与线程",
+          "type": "concept"
+        },
+        {
+          "name": "内存管理",
+          "type": "concept"
+        },
+        {
+          "name": "文件系统",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "信息技术运维",
+      "knowledge_points": [
+        {
+          "name": "网络故障排查",
+          "type": "procedure"
+        },
+        {
+          "name": "系统运维与监控",
+          "type": "procedure"
+        }
+      ]
+    }
+  ]
+}

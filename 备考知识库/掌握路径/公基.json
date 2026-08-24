@@ -1,0 +1,93 @@
+{
+  "mastery_path_id": "gongji",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "政治",
+      "knowledge_points": [
+        {
+          "name": "马克思主义哲学基本原理",
+          "type": "memory"
+        },
+        {
+          "name": "习近平新时代中国特色社会主义思想",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "法律",
+      "knowledge_points": [
+        {
+          "name": "宪法",
+          "type": "memory"
+        },
+        {
+          "name": "民法",
+          "type": "memory"
+        },
+        {
+          "name": "刑法",
+          "type": "memory"
+        },
+        {
+          "name": "行政法",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "经济",
+      "knowledge_points": [
+        {
+          "name": "微观经济学基本概念",
+          "type": "concept"
+        },
+        {
+          "name": "宏观经济学基本概念",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "管理",
+      "knowledge_points": [
+        {
+          "name": "行政管理基本概念",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "公文",
+      "knowledge_points": [
+        {
+          "name": "公文种类与格式",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "科技人文",
+      "knowledge_points": [
+        {
+          "name": "科技常识",
+          "type": "memory"
+        },
+        {
+          "name": "历史人文常识",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "时政",
+      "knowledge_points": [
+        {
+          "name": "年度时政要点",
+          "type": "memory"
+        }
+      ]
+    }
+  ]
+}

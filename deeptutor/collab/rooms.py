@@ -67,6 +67,9 @@ class Room:
         member = Member(member_id, ws, display_name, is_owner)
         self.members[member_id] = member
         # The presenter (whose scroll everyone follows) defaults to the owner.
+        # If the presenter was None and the owner just joined, existing members
+        # need to know so their follow effect can start tracking.
+        presenter_was_none = self.presenter_id is None
         if self.presenter_id is None and is_owner:
             self.presenter_id = member_id
         await self._broadcast(
@@ -78,6 +81,16 @@ class Room:
             },
             exclude=member_id,
         )
+        if presenter_was_none and self.presenter_id is not None:
+            # The owner just became the first presenter; tell the room.
+            await self._broadcast(
+                {
+                    "type": "presenter_changed",
+                    "presenter_id": self.presenter_id,
+                    "display_name": member.display_name,
+                },
+                exclude=member_id,
+            )
         return self.welcome(member)
 
     def welcome(self, member: Member) -> dict[str, Any]:

@@ -1,0 +1,75 @@
+{
+  "mastery_path_id": "shenlun",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "阅读与概括",
+      "knowledge_points": [
+        {
+          "name": "归纳概括方法",
+          "type": "concept"
+        },
+        {
+          "name": "要点提炼与分层",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "综合分析",
+      "knowledge_points": [
+        {
+          "name": "解释型分析",
+          "type": "concept"
+        },
+        {
+          "name": "评论型分析",
+          "type": "design"
+        }
+      ]
+    },
+    {
+      "name": "提出对策",
+      "knowledge_points": [
+        {
+          "name": "对策来源与推导",
+          "type": "procedure"
+        },
+        {
+          "name": "对策可行性校验",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "贯彻执行",
+      "knowledge_points": [
+        {
+          "name": "公文文种与格式",
+          "type": "memory"
+        },
+        {
+          "name": "公文写作结构",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "文章写作",
+      "knowledge_points": [
+        {
+          "name": "立意与标题",
+          "type": "design"
+        },
+        {
+          "name": "论证结构",
+          "type": "design"
+        },
+        {
+          "name": "开头与结尾",
+          "type": "design"
+        }
+      ]
+    }
+  ]
+}

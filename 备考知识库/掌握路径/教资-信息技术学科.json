@@ -1,0 +1,105 @@
+{
+  "mastery_path_id": "jiaozi-xueke",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "信息与信息技术基础",
+      "knowledge_points": [
+        {
+          "name": "信息与信息技术概念",
+          "type": "memory"
+        },
+        {
+          "name": "信息技术发展史",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "计算机基础",
+      "knowledge_points": [
+        {
+          "name": "数制与信息编码",
+          "type": "memory"
+        },
+        {
+          "name": "计算机系统组成",
+          "type": "concept"
+        },
+        {
+          "name": "操作系统基础",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "计算机网络",
+      "knowledge_points": [
+        {
+          "name": "网络体系结构与协议",
+          "type": "concept"
+        },
+        {
+          "name": "网络设备与拓扑",
+          "type": "procedure"
+        },
+        {
+          "name": "网络安全",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "数据库",
+      "knowledge_points": [
+        {
+          "name": "数据模型与关系模型",
+          "type": "concept"
+        },
+        {
+          "name": "SQL语言",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "程序设计基础",
+      "knowledge_points": [
+        {
+          "name": "算法与流程图",
+          "type": "concept"
+        },
+        {
+          "name": "程序语言基础",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "信息安全与社会",
+      "knowledge_points": [
+        {
+          "name": "信息安全技术",
+          "type": "memory"
+        },
+        {
+          "name": "信息道德与法规",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "信息技术教学论",
+      "knowledge_points": [
+        {
+          "name": "信息技术教学设计",
+          "type": "design"
+        },
+        {
+          "name": "教学评价",
+          "type": "concept"
+        }
+      ]
+    }
+  ]
+}

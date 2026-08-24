@@ -1,0 +1,107 @@
+{
+  "mastery_path_id": "xingce",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "数量关系",
+      "knowledge_points": [
+        {
+          "name": "数学运算基础",
+          "type": "memory"
+        },
+        {
+          "name": "常用速算技巧",
+          "type": "procedure"
+        },
+        {
+          "name": "行程问题",
+          "type": "procedure"
+        },
+        {
+          "name": "工程问题",
+          "type": "procedure"
+        },
+        {
+          "name": "排列组合与概率",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "判断推理",
+      "knowledge_points": [
+        {
+          "name": "图形推理规律",
+          "type": "concept"
+        },
+        {
+          "name": "直言命题与三段论",
+          "type": "concept"
+        },
+        {
+          "name": "假言命题推理",
+          "type": "procedure"
+        },
+        {
+          "name": "类比推理",
+          "type": "procedure"
+        },
+        {
+          "name": "定义判断",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "言语理解",
+      "knowledge_points": [
+        {
+          "name": "逻辑填空·语境分析",
+          "type": "procedure"
+        },
+        {
+          "name": "片段阅读·主旨概括",
+          "type": "concept"
+        },
+        {
+          "name": "语句排序与衔接",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "资料分析",
+      "knowledge_points": [
+        {
+          "name": "增长率/比重/平均数公式",
+          "type": "memory"
+        },
+        {
+          "name": "截位直除等速算",
+          "type": "procedure"
+        },
+        {
+          "name": "综合分析题",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "常识判断",
+      "knowledge_points": [
+        {
+          "name": "法律常识",
+          "type": "memory"
+        },
+        {
+          "name": "时政常识",
+          "type": "memory"
+        },
+        {
+          "name": "科技人文常识",
+          "type": "memory"
+        }
+      ]
+    }
+  ]
+}

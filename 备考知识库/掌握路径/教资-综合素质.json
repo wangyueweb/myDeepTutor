@@ -1,0 +1,83 @@
+{
+  "mastery_path_id": "jiaozi-zonghe",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "职业理念",
+      "knowledge_points": [
+        {
+          "name": "教育观",
+          "type": "memory"
+        },
+        {
+          "name": "学生观",
+          "type": "concept"
+        },
+        {
+          "name": "教师观",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "教育法律法规",
+      "knowledge_points": [
+        {
+          "name": "教育法律法规体系",
+          "type": "memory"
+        },
+        {
+          "name": "教师权利义务",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "教师职业道德",
+      "knowledge_points": [
+        {
+          "name": "教师职业道德规范",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "文化素养",
+      "knowledge_points": [
+        {
+          "name": "科技常识",
+          "type": "memory"
+        },
+        {
+          "name": "人文常识",
+          "type": "memory"
+        },
+        {
+          "name": "艺术鉴赏常识",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "基本能力",
+      "knowledge_points": [
+        {
+          "name": "阅读理解",
+          "type": "procedure"
+        },
+        {
+          "name": "逻辑思维",
+          "type": "procedure"
+        },
+        {
+          "name": "信息处理",
+          "type": "procedure"
+        },
+        {
+          "name": "写作",
+          "type": "design"
+        }
+      ]
+    }
+  ]
+}

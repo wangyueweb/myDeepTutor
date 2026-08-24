@@ -1,0 +1,126 @@
+{
+  "mastery_path_id": "jiaozi-jiaoyu",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "教育基础知识",
+      "knowledge_points": [
+        {
+          "name": "教育学发展史",
+          "type": "memory"
+        },
+        {
+          "name": "教育目的与教育制度",
+          "type": "memory"
+        }
+      ]
+    },
+    {
+      "name": "中学课程",
+      "knowledge_points": [
+        {
+          "name": "课程类型与理论",
+          "type": "concept"
+        },
+        {
+          "name": "课程改革",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "中学教学",
+      "knowledge_points": [
+        {
+          "name": "教学原则",
+          "type": "memory"
+        },
+        {
+          "name": "教学方法",
+          "type": "procedure"
+        },
+        {
+          "name": "教学过程基本环节",
+          "type": "procedure"
+        },
+        {
+          "name": "教学设计",
+          "type": "design"
+        }
+      ]
+    },
+    {
+      "name": "中学生学习心理",
+      "knowledge_points": [
+        {
+          "name": "认知发展理论",
+          "type": "concept"
+        },
+        {
+          "name": "学习动机",
+          "type": "concept"
+        },
+        {
+          "name": "学习迁移",
+          "type": "concept"
+        },
+        {
+          "name": "学习策略",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "中学生发展心理",
+      "knowledge_points": [
+        {
+          "name": "情绪情感与意志",
+          "type": "concept"
+        },
+        {
+          "name": "人格发展与自我意识",
+          "type": "concept"
+        }
+      ]
+    },
+    {
+      "name": "中学生心理辅导",
+      "knowledge_points": [
+        {
+          "name": "常见心理问题",
+          "type": "memory"
+        },
+        {
+          "name": "心理辅导方法",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "中学德育",
+      "knowledge_points": [
+        {
+          "name": "德育原则",
+          "type": "memory"
+        },
+        {
+          "name": "德育方法",
+          "type": "procedure"
+        }
+      ]
+    },
+    {
+      "name": "班级管理与教师心理",
+      "knowledge_points": [
+        {
+          "name": "班级管理",
+          "type": "memory"
+        },
+        {
+          "name": "教师心理",
+          "type": "concept"
+        }
+      ]
+    }
+  ]
+}

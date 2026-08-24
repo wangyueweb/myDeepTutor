@@ -1,0 +1,66 @@
+{
+  "mastery_path_id": "kaoyan-shuer",
+  "mode": "replace",
+  "modules": [
+    {
+      "name": "高中地基（只补用到部分）",
+      "knowledge_points": [
+        {"name": "函数概念与基本初等函数", "type": "concept"},
+        {"name": "三角函数与恒等变换", "type": "procedure"},
+        {"name": "指数与对数运算", "type": "procedure"},
+        {"name": "不等式与数列通项", "type": "memory"}
+      ]
+    },
+    {
+      "name": "高等数学：极限与一元微分",
+      "knowledge_points": [
+        {"name": "极限的概念与性质", "type": "concept"},
+        {"name": "极限的四则运算法则", "type": "procedure"},
+        {"name": "两个重要极限", "type": "memory"},
+        {"name": "无穷小与等价无穷小替换", "type": "memory"},
+        {"name": "函数连续性与间断点", "type": "concept"},
+        {"name": "导数与微分的定义", "type": "concept"},
+        {"name": "求导法则（复合/隐函数/参数方程）", "type": "procedure"},
+        {"name": "高阶导数", "type": "memory"},
+        {"name": "微分中值定理", "type": "concept"},
+        {"name": "洛必达法则", "type": "procedure"},
+        {"name": "函数的单调性与极值最值", "type": "concept"},
+        {"name": "凹凸性与拐点", "type": "concept"},
+        {"name": "导数在几何与实际问题中的应用", "type": "procedure"}
+      ]
+    },
+    {
+      "name": "高等数学：一元积分、多元与微分方程",
+      "knowledge_points": [
+        {"name": "不定积分概念与基本积分公式", "type": "memory"},
+        {"name": "换元积分法", "type": "procedure"},
+        {"name": "分部积分法", "type": "procedure"},
+        {"name": "定积分概念与性质", "type": "concept"},
+        {"name": "牛顿-莱布尼茨公式", "type": "memory"},
+        {"name": "定积分计算与换元", "type": "procedure"},
+        {"name": "反常积分", "type": "concept"},
+        {"name": "定积分的应用（面积/体积）", "type": "procedure"},
+        {"name": "多元函数偏导数与全微分", "type": "concept"},
+        {"name": "多元函数极值", "type": "procedure"},
+        {"name": "二重积分", "type": "procedure"},
+        {"name": "一阶微分方程（可分离/齐次/一阶线性）", "type": "procedure"},
+        {"name": "二阶常系数线性微分方程", "type": "procedure"}
+      ]
+    },
+    {
+      "name": "线性代数",
+      "knowledge_points": [
+        {"name": "行列式的定义与性质", "type": "memory"},
+        {"name": "行列式计算方法", "type": "procedure"},
+        {"name": "矩阵概念与运算", "type": "procedure"},
+        {"name": "逆矩阵与伴随矩阵", "type": "procedure"},
+        {"name": "矩阵的秩", "type": "concept"},
+        {"name": "向量组的线性相关性与秩", "type": "concept"},
+        {"name": "线性方程组的解的结构", "type": "procedure"},
+        {"name": "特征值与特征向量", "type": "concept"},
+        {"name": "相似对角化", "type": "procedure"},
+        {"name": "二次型及其标准形", "type": "concept"}
+      ]
+    }
+  ]
+}
