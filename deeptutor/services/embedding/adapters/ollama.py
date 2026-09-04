@@ -61,7 +61,12 @@ class OllamaEmbeddingAdapter(BaseEmbeddingAdapter):
 
         try:
             async with httpx.AsyncClient(
-                timeout=self.request_timeout, verify=not disable_ssl_verify_enabled()
+                timeout=self.request_timeout,
+                verify=not disable_ssl_verify_enabled(),
+                # Ollama is a local service — never route it through the
+                # environment's HTTP(S)_PROXY, which would break the localhost
+                # connection (a common cause of "Cannot connect to Ollama").
+                trust_env=False,
             ) as client:
                 response = await client.post(
                     url,
